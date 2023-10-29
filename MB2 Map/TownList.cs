@@ -91,6 +91,8 @@ namespace MB2_Map
         public float GetTownsDistance(Town town1, Town town2)
         {
             //Debugger.Break();
+            //if (town1 == null || town2 == null)
+            //    return 0.0f;
             string[] townArray = {town1.ToString(true), town2.ToString(true)};
             Array.Sort(townArray);
             return _trueDistance[(townArray[0], townArray[1])];

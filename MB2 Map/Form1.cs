@@ -120,8 +120,8 @@ namespace MB2_Map
             listBox1.DataSource =
                 new List<TownList.Town>(_towns.TownsList.Where(town1 =>
                     town1.Name.ToLower().Contains(textBox1.Text.ToLower()))).
-                    OrderBy(f => f.CurrentDistance).ToList();
-            listBox1.SelectedItem = currentItem;
+                    OrderBy(f => f.ToString()).ToList();
+            listBox1.SelectedItem = currentItem != null ? currentItem : 0;
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
