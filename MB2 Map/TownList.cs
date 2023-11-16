@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace MB2_Map
 {
@@ -12,7 +13,8 @@ namespace MB2_Map
         {
             private readonly TownList _mainClass;
             public string Name { get; set; }
-            public PointF Location { get; }
+            public PointF Location { get; set; }
+            public bool MasterListTown { get; set; }
             public float CurrentDistance => _mainClass.GetTownsDistance(this, _mainClass._referTo.SelectedItem as Town);
 
             public Town(TownList mainClass, string name, PointF location)
@@ -60,23 +62,46 @@ namespace MB2_Map
             _referTo = listBox;
         }
 
-        public void AddTown(string name, PointF loc)
+        public Town AddTown(string name, PointF loc, bool masterListTown = false)
         {
-            TownsList.Add(new Town(this, name, loc));
+            var townTuple = (name, name);
+            if (_trueDistance.ContainsKey(townTuple))
+                return null;
+            var newTown = new Town(this, name, loc)
+            {
+                MasterListTown = masterListTown
+            };
+            TownsList.Add(newTown);
+            foreach (var town in TownsList)
+            {
+                string[] townArray = { name, town.ToString() };
+                Array.Sort(townArray);
+                townTuple = (townArray[0], townArray[1]);
+                if (!_trueDistance.ContainsKey(townTuple))
+                    _trueDistance.Add(townTuple, _distForm(town, newTown));
+            }
+            return newTown;
         }
 
-        public void AddTown(string name, float locationX, float locationY)
+        public Town AddTown(string name, float locationX, float locationY, bool masterListTown = false)
         {
-            var newTown = new Town(this, name, locationX, locationY);
+            var townTuple = (name, name);
+            if (_trueDistance.ContainsKey(townTuple))
+                return null;
+            var newTown = new Town(this, name, locationX, locationY)
+            {
+                MasterListTown = masterListTown
+            };
             TownsList.Add(newTown);
             foreach (var town in TownsList)
             {
                 string[] townArray = {name, town.ToString()};
                 Array.Sort(townArray);
-                var townTuple = (townArray[0], townArray[1]);
+                townTuple = (townArray[0], townArray[1]);
                 if (!_trueDistance.ContainsKey(townTuple))
                     _trueDistance.Add(townTuple, _distForm(town, newTown));
             }
+            return newTown;
         }
 
         public void AddTrueLocation(string town1, string town2, float distance)
@@ -86,6 +111,86 @@ namespace MB2_Map
             var townTuple = (townArray[0], townArray[1]);
             if (!_trueDistance.ContainsKey(townTuple))
                 _trueDistance.Add((townArray[0], townArray[1]), distance);
+        }
+        public void DeleteTown(string name)
+        {
+            Town townToRemove = null;
+            foreach (var town in TownsList)
+            {
+                if (town.ToString(true) == name)
+                {
+                    townToRemove = town;
+                    break;
+                }
+            }
+            if (townToRemove == null)
+                return;
+            foreach (var town in TownsList)
+            {
+                string[] townArray = { town.ToString(true), townToRemove.ToString(true) };
+                Array.Sort(townArray);
+                var townTuple = (townArray[0], townArray[1]);
+                _trueDistance.Remove(townTuple);
+            }
+            _ = TownsList.Remove(townToRemove);
+        }
+        public void DeleteTown(Town townToRemove)
+        {
+            if (townToRemove == null)
+                return;
+            foreach (var town in TownsList)
+            {
+                string[] townArray = { town.ToString(true), townToRemove.ToString(true) };
+                Array.Sort(townArray);
+                var townTuple = (townArray[0], townArray[1]);
+                _trueDistance.Remove(townTuple);
+            }
+            _ = TownsList.Remove(townToRemove);
+        }
+        public void UpdateTown(Town townToUpdate)
+        {
+            foreach (var town in TownsList)
+            {
+                string[] townArray = { town.ToString(true), townToUpdate.ToString(true) };
+                Array.Sort(townArray);
+                var townTuple = (townArray[0], townArray[1]);
+                if (!_trueDistance.ContainsKey(townTuple))
+                    _trueDistance.Add(townTuple, _distForm(town, townToUpdate));
+                else
+                    _trueDistance[townTuple] = _distForm(town, townToUpdate);
+            }
+        }
+        public void UpdateTown(string townNameToUpdate, float x, float y)
+        {
+            Town townToUpdate = null;
+            foreach (var town in TownsList)
+            {
+                if (town.ToString(true) == townNameToUpdate)
+                {
+                    townToUpdate = town;
+                    break;
+                }
+            }
+            if (townToUpdate == null)
+            {
+                townToUpdate = new Town(this, townNameToUpdate, new PointF(x, y));
+                TownsList.Add(townToUpdate);
+            } 
+            else
+            {
+                townToUpdate.Location = new PointF(x, y);
+            }
+            
+            foreach (var town in TownsList)
+            {
+                string[] townArray = { town.ToString(true), townToUpdate.ToString(true) };
+                Array.Sort(townArray);
+                var townTuple = (townArray[0], townArray[1]);
+                if (!_trueDistance.ContainsKey(townTuple))
+                    _trueDistance.Add(townTuple, _distForm(town, townToUpdate));
+                else
+                    _trueDistance[townTuple] = _distForm(town, townToUpdate);
+            }
         }
 
         public float GetTownsDistance(Town town1, Town town2)
