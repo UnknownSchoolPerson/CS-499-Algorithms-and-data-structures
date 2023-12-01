@@ -11,4 +11,10 @@
     <Exec Command="if not exist &quot;$(OutDir)\Towns\&quot; mkdir &quot;$(OutDir)\Towns\&quot;&#xD;&#xA;copy &quot;$(ProjectDir)Towns\*&quot; &quot;$(OutDir)\Towns\&quot;&#xD;&#xA;copy &quot;$(ProjectDir)TrueDistance.txt&quot; &quot;$(OutDir)&quot;" />
   </Target>
 
+  <ItemGroup>
+    <Compile Remove="Towns - Copy\**" />
+    <EmbeddedResource Remove="Towns - Copy\**" />
+    <None Remove="Towns - Copy\**" />
+  </ItemGroup>
+
 </Project>
