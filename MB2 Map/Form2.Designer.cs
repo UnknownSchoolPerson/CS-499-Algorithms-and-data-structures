@@ -33,13 +33,13 @@
             textBox2 = new System.Windows.Forms.TextBox();
             numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            button1 = new System.Windows.Forms.Button();
-            button2 = new System.Windows.Forms.Button();
+            UpdateBtn = new System.Windows.Forms.Button();
+            DeleteBtn = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox2 = new System.Windows.Forms.GroupBox();
             textBox3 = new System.Windows.Forms.TextBox();
             numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            button4 = new System.Windows.Forms.Button();
+            AddBtn = new System.Windows.Forms.Button();
             numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
@@ -94,32 +94,32 @@
             numericUpDown2.Size = new System.Drawing.Size(156, 23);
             numericUpDown2.TabIndex = 4;
             // 
-            // button1
+            // UpdateBtn
             // 
-            button1.Location = new System.Drawing.Point(6, 109);
-            button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(75, 23);
-            button1.TabIndex = 5;
-            button1.Text = "Update";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            UpdateBtn.Location = new System.Drawing.Point(6, 109);
+            UpdateBtn.Name = "UpdateBtn";
+            UpdateBtn.Size = new System.Drawing.Size(75, 23);
+            UpdateBtn.TabIndex = 5;
+            UpdateBtn.Text = "Update";
+            UpdateBtn.UseVisualStyleBackColor = true;
+            UpdateBtn.Click += Update_Click;
             // 
-            // button2
+            // DeleteBtn
             // 
-            button2.Location = new System.Drawing.Point(87, 109);
-            button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(75, 23);
-            button2.TabIndex = 6;
-            button2.Text = "Delete";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            DeleteBtn.Location = new System.Drawing.Point(87, 109);
+            DeleteBtn.Name = "DeleteBtn";
+            DeleteBtn.Size = new System.Drawing.Size(75, 23);
+            DeleteBtn.TabIndex = 6;
+            DeleteBtn.Text = "Delete";
+            DeleteBtn.UseVisualStyleBackColor = true;
+            DeleteBtn.Click += Delete_Click;
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(textBox2);
-            groupBox1.Controls.Add(button2);
+            groupBox1.Controls.Add(DeleteBtn);
             groupBox1.Controls.Add(numericUpDown1);
-            groupBox1.Controls.Add(button1);
+            groupBox1.Controls.Add(UpdateBtn);
             groupBox1.Controls.Add(numericUpDown2);
             groupBox1.Location = new System.Drawing.Point(269, 42);
             groupBox1.Name = "groupBox1";
@@ -132,7 +132,7 @@
             // 
             groupBox2.Controls.Add(textBox3);
             groupBox2.Controls.Add(numericUpDown3);
-            groupBox2.Controls.Add(button4);
+            groupBox2.Controls.Add(AddBtn);
             groupBox2.Controls.Add(numericUpDown4);
             groupBox2.Location = new System.Drawing.Point(269, 189);
             groupBox2.Name = "groupBox2";
@@ -158,15 +158,15 @@
             numericUpDown3.Size = new System.Drawing.Size(156, 23);
             numericUpDown3.TabIndex = 3;
             // 
-            // button4
+            // AddBtn
             // 
-            button4.Location = new System.Drawing.Point(6, 109);
-            button4.Name = "button4";
-            button4.Size = new System.Drawing.Size(156, 23);
-            button4.TabIndex = 5;
-            button4.Text = "Add";
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
+            AddBtn.Location = new System.Drawing.Point(6, 109);
+            AddBtn.Name = "AddBtn";
+            AddBtn.Size = new System.Drawing.Size(156, 23);
+            AddBtn.TabIndex = 5;
+            AddBtn.Text = "Add";
+            AddBtn.UseVisualStyleBackColor = true;
+            AddBtn.Click += Add_Click;
             // 
             // numericUpDown4
             // 
@@ -209,13 +209,13 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button UpdateBtn;
+        private System.Windows.Forms.Button DeleteBtn;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.NumericUpDown numericUpDown3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button AddBtn;
         private System.Windows.Forms.NumericUpDown numericUpDown4;
     }
 }

@@ -1,29 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static MB2_Map.TownList;
-using static System.Windows.Forms.LinkLabel;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace MB2_Map
 {
     public partial class Form2 : Form
     {
-        Form1 _creator;
         TownList _towns;
         public Form2(Form1 creator, TownList towns)
         {
             InitializeComponent();
+            // Save our towns list and sub to the form closing event
             _towns = towns;
-            _creator = creator;
             FormClosing += creator.Form2_FormClosing;
         }
 
@@ -35,21 +28,24 @@ namespace MB2_Map
         private void updateListBox()
         {
             var currentItem = listBox1.SelectedItem;
+            // Bind and sort our towns list to listBox1
             listBox1.DataSource =
-            new List<TownList.Town>(_towns.TownsList.Where(town1 =>
+            new List<Town>(_towns.TownsList.Where(town1 =>
                     town1.Name.ToLower().Contains(textBox1.Text.ToLower()))).
                     OrderBy(f => f.ToString()).ToList();
-            listBox1.SelectedItem = currentItem != null ? currentItem : 0;
+            // Something should be selected for SelectedItem
+            listBox1.SelectedItem = currentItem ?? 0;
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateText();
+            UpdateText();
         }
 
-        private void updateText()
+        private void UpdateText()
         {
-            var town = (TownList.Town)listBox1.SelectedItem;
+            // Get our town data and bind them to stuff
+            var town = (Town)listBox1.SelectedItem;
             textBox2.Text = town.ToString();
             var location = town.Location;
             numericUpDown1.Value = (decimal)location.X;
@@ -61,29 +57,34 @@ namespace MB2_Map
             updateListBox();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Update_Click(object sender, EventArgs e)
         {
-            var town = (TownList.Town)listBox1.SelectedItem;
+            // Save our updated town to the list and save it to a file
+            var town = (Town)listBox1.SelectedItem;
             PointF location = new((float)numericUpDown1.Value, (float)numericUpDown2.Value);
             town.Name = textBox2.Text;
             town.Location = location;
             _towns.UpdateTown(town);
-            writeToFile(town);
+            WriteToFile(town);
             updateListBox();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Delete_Click(object sender, EventArgs e)
         {
+            // Delete the town and save that delete to a file
             var town = (Town)listBox1.SelectedItem;
             _towns.DeleteTown(town);
-            writeToFile(town);
+            WriteToFile(town);
             updateListBox();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Add_Click(object sender, EventArgs e)
         {
+            // Adding a new town
             if (textBox3.Text.Length == 0)
                 return;
+            // Try to add the town
+            // If it returns null, the name is taken
             var town = _towns.AddTown(textBox3.Text, new PointF((float)numericUpDown3.Value, (float)numericUpDown4.Value));
             if (town == null)
             {
@@ -95,17 +96,18 @@ namespace MB2_Map
             numericUpDown4.Value = 0;
             updateListBox();
             listBox1.SelectedItem = town;
-            writeToFile(town);
+            // Save our town to a file
+            WriteToFile(town);
         }
 
-        private void writeToFile(Town town)
+        private static void WriteToFile(Town town)
         {
+            // Get our towns folder
             var wd = @$"{Directory.GetCurrentDirectory()}\Towns";
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(wd, @$"{town.Name}.txt"), false))
-            {
-                // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings#FFormatString
-                outputFile.WriteLine(@$"{town.Location.X:F4},{town.Location.Y:F4}");
-            }
+            using StreamWriter outputFile = new(Path.Combine(wd, @$"{town.Name}.txt"), false);
+            // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings#FFormatString
+            // Save to file.
+            outputFile.WriteLine(@$"{town.Location.X:F4},{town.Location.Y:F4}");
         }
     }
 }
