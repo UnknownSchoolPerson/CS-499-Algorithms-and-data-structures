@@ -188,7 +188,7 @@
             Controls.Add(textBox1);
             Controls.Add(listBox1);
             Name = "Form2";
-            Text = "Form2";
+            Text = "Town Editor";
             Load += Form2_Load;
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
